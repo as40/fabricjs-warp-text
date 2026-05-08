@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fabric.js Warp Text Plugin Demo</title>
+    <!-- Tailwind CSS for UI styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fabric.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script src="fabricjs-warp-text.js"></script>
+    <style>
+      /* Custom range slider styling */
+      input[type="range"] {
+        -webkit-appearance: none;
+        width: 100%;
+        background: transparent;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        background: #4f46e5;
+        cursor: pointer;
+        margin-top: -6px;
+      }
+      input[type="range"]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 4px;
+        cursor: pointer;
+        background: #e5e7eb;
+        border-radius: 2px;
+      }
+      select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        appearance: none;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gray-50 flex flex-col items-center justify-center min-h-screen p-4"
+  >
+    <div
+      class="bg-white p-6 rounded-xl shadow-lg w-full max-w-5xl flex flex-col md:flex-row gap-8"
+    >
+      <!-- Controls -->
+      <div class="w-full md:w-1/3 space-y-6">
+        <h2 class="text-xl font-bold text-gray-800 border-b pb-2">
+          Warp Controls
+        </h2>
+
+        <!-- Effect Dropdown -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Effect Type</label
+          >
+          <select
+            id="iEffect"
+            class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
+          >
+            <option value="arch">Arch (Classic)</option>
+            <option value="bulge">Bulge</option>
+            <option value="flag">Flag / Wave</option>
+            <option value="roof">Roof / Triangle</option>
+            <option value="valley">Valley</option>
+          </select>
+        </div>
+
+        <!-- Curve Control -->
+        <div>
+          <div
+            class="flex justify-between text-sm font-medium text-gray-700 mb-1"
+          >
+            <span>Intensity / Curve</span>
+            <span id="vCurve" class="text-indigo-600">110</span>
+          </div>
+          <input id="iCurve" type="range" min="-150" max="250" value="110" />
+        </div>
+
+        <!-- Text Height Control -->
+        <div>
+          <div
+            class="flex justify-between text-sm font-medium text-gray-700 mb-1"
+          >
+            <span>Base Height</span>
+            <span id="vHeight" class="text-indigo-600">64</span>
+          </div>
+          <input id="iHeight" type="range" min="10" max="200" value="64" />
+        </div>
+
+        <!-- Content Input -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Text Content</label
+          >
+          <input
+            id="iText"
+            type="text"
+            value="WARP ZONE"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </div>
+
+        <!-- Help Text -->
+        <div
+          class="bg-blue-50 p-3 rounded text-xs text-blue-700 leading-relaxed"
+        >
+          <strong>Tip:</strong> Drag the slider left/right to invert effects
+          (e.g., negative curve on Arch makes a smiley face).
+        </div>
+      </div>
+
+      <!-- Canvas -->
+      <div class="w-full md:w-2/3 flex flex-col gap-2">
+        <div
+          class="flex-grow flex items-center justify-center bg-gray-100 rounded-lg border border-gray-200 overflow-hidden relative shadow-inner"
+          style="min-height: 450px"
+        >
+          <canvas id="demo"></canvas>
+        </div>
+        <div class="text-center text-xs text-gray-400">
+          Interactive Canvas - Drag to move, Scale to resize
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /**
+       * INITIALIZATION
+       */
+      var canvasElement = document.getElementById("demo");
+      canvasElement.width = canvasElement.parentElement.clientWidth;
+      canvasElement.height = 450;
+
+      var canvas = new fabric.Canvas("demo", {
+        backgroundColor: "#f3f4f6",
+      });
+
+      // Create Initial Object using the external plugin
+      var warpText = new fabric.WarpText("WARP ZONE", {
+        left: canvas.width / 2,
+        top: canvas.height / 2,
+        originX: "center",
+        originY: "center",
+        fontFamily: "Arial",
+        fontWeight: "bold",
+        fontSize: 80,
+        fill: "#4f46e5",
+        effect: "arch",
+        curve: 110,
+        textHeight: 64,
+      });
+
+      canvas.add(warpText);
+      canvas.setActiveObject(warpText);
+
+      // Responsive Canvas Resizing
+      window.addEventListener("resize", function () {
+        var containerWidth = canvasElement.parentElement.clientWidth;
+        canvas.setWidth(containerWidth);
+        warpText.center();
+      });
+
+      /**
+       * UI CONTROLS WIRING
+       */
+      // Effect Dropdown
+      document
+        .getElementById("iEffect")
+        .addEventListener("change", function () {
+          warpText.set("effect", this.value);
+          canvas.requestRenderAll();
+        });
+
+      // Range Sliders
+      var inputs = {
+        iCurve: "curve",
+        iHeight: "textHeight",
+      };
+
+      Object.keys(inputs).forEach(function (id) {
+        var el = document.getElementById(id);
+        var label = document.getElementById(id.replace("i", "v"));
+
+        el.addEventListener("input", function () {
+          var val = parseInt(this.value, 10);
+          if (label) label.innerHTML = val;
+          warpText.set(inputs[id], val);
+          canvas.requestRenderAll();
+        });
+      });
+
+      // Text Input
+      document.getElementById("iText").addEventListener("input", function () {
+        warpText.set("text", this.value);
+        canvas.requestRenderAll();
+      });
+    </script>
+  </body>
+</html>
