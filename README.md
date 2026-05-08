@@ -18,15 +18,27 @@ _(Add a link to your live demo here once published via GitHub pages!)_
 Simply include the `fabric-warp-text.js` file in your project _after_ loading Fabric.js.
 
 ```html
-<script src="[https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js](https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js)"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
 <script src="path/to/fabric-warp-text.js"></script>
+```
 
-// Initialize your Canvas var canvas = new fabric.Canvas('canvas'); // Create a
-WarpText object var warpText = new fabric.WarpText('HELLO WORLD', { fontFamily:
-'Arial', fontSize: 80, fill: '#ff0000', // Plugin Specific Options: effect:
-'arch', // 'arch', 'bulge', 'flag', 'roof', 'valley' curve: 80, //
-Intensity/Strength of the curve (can be negative) textHeight: 100 // The base
-vertical height of the warp effect }); // Add to canvas canvas.add(warpText);
+```javascript
+// Initialize your Canvas
+var canvas = new fabric.Canvas("canvas");
+
+// Create a WarpText object
+var warpText = new fabric.WarpText("HELLO WORLD", {
+  fontFamily: "Arial",
+  fontSize: 80,
+  fill: "#ff0000",
+  // Plugin Specific Options:
+  effect: "arch", // 'arch', 'bulge', 'flag', 'roof', 'valley'
+  curve: 80, // Intensity/Strength of the curve (can be negative)
+  textHeight: 100, // The base vertical height of the warp effect
+});
+
+// Add to canvas
+canvas.add(warpText);
 ```
 
 | Property     | Type   | Default  | Description                                                                            |
