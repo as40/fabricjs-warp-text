@@ -4,7 +4,7 @@ A powerful, high-resolution text warping plugin for Fabric.js. This plugin exten
 
 ## Demo
 
-_(Add a link to your live demo here once published via GitHub pages!)_
+[Live Demo](https://as40.github.io/fabricjs-warp-text/)
 
 ## Features
 
